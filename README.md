@@ -212,6 +212,13 @@ During a session, visit [http://127.0.0.1:7395](http://127.0.0.1:7395) for live 
 
 For a saved SQLite session, run `agentsight report serve --db run.db` and open the same routes.
 
+#### Web interface modes and refresh behavior
+
+The web UI runs in two modes, which determine where data comes from and whether it updates on its own:
+
+- **Live mode** — started by `agentsight record`, `top`, or `monitor` with the embedded web server. The browser **auto-refreshes** (overview every ~3s, snapshot every ~30s) and the capture is streamed from the in-memory view. Live captures also persist to a local **SQLite** database you can later query with `agentsight report --db <path>` or `agentsight report serve --db <path>`.
+- **Directory / saved mode** — started by `agentsight report serve` (without `--db`) or by `agentsight top` for IDE agents such as Cursor and CodeBuddy. In this mode the browser does **not** auto-refresh; **reload the page** to pick up new activity. Without `--db`, data is read directly from the agent's own native session files (for example CodeBuddy's `~/.codebuddy/projects/*.jsonl` or Claude's `~/.claude/projects`), not from AgentSight's database. With `--db <path>` it instead reads AgentSight's own SQLite capture.
+
 <div align="center">
   <img src="https://github.com/eunomia-bpf/agentsight/raw/master/docs/demo-tree.png" alt="AgentSight Demo - Process Tree Visualization" width="800">
   <p><em>Process tree visualization for agent subprocesses and file activity</em></p>
